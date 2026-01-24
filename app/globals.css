@@ -1,8 +1,32 @@
 @import "tailwindcss";
 
+/* ===== CSS Variables for Theming ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.3);
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(71, 85, 105, 0.3);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #60a5fa;
+    --accent-glow: rgba(96, 165, 250, 0.3);
+  }
 }
 
 @theme inline {
@@ -12,15 +36,186 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ===== Base Styles ===== */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Animations ===== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-fade-in,
+  .animate-float,
+  .animate-pulse-glow,
+  .animate-spin-slow,
+  .animate-gradient {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .animate-fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Glassmorphism Card ===== */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--card-border);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Typography ===== */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Weather-specific backgrounds ===== */
+.weather-gradient-clear {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #fb923c, #f97316);
+}
+
+.weather-gradient-clouds {
+  background: linear-gradient(135deg, #94a3b8, #64748b, #475569, #334155);
+}
+
+.weather-gradient-rain {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6, #6366f1, #4f46e5);
+}
+
+.weather-gradient-storm {
+  background: linear-gradient(135deg, #475569, #6366f1, #7c3aed, #1e1b4b);
+}
+
+.weather-gradient-snow {
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd, #7dd3fc, #38bdf8);
+}
+
+.weather-gradient-mist {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1, #94a3b8, #64748b);
+}
+
+.weather-gradient-default {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9, #0284c7, #0369a1);
+}
+
+/* ===== Focus States ===== */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ===== Interactive States ===== */
+.interactive-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactive-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.interactive-hover:active {
+  transform: translateY(0);
+}
+
+/* ===== Number display ===== */
+.temperature-display {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  line-height: 1;
 }
